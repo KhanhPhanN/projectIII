@@ -66,6 +66,7 @@ li:nth-child(odd) {
 .symbol_place{
     border: 1px solid aqua;
     background: rgb(81, 255, 0);
+    margin-bottom: -10px;
 }
 #symbol_place{
     position: relative;
