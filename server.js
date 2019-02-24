@@ -15,7 +15,7 @@ app.use((req,res,next)=>{
     }
     next();
 })
-server.listen(8084);
+server.listen(8084,()=>{console.log("Server start")});
 var fetch = require('node-fetch')
 app.get("/",function(req1,res){
 //     const uri = 'https://maps.googleapis.com/maps/api/place/textsearch/json?query=London&sensor=true&language=vi&key=AIzaSyBfQPm46M3j2joTFlHachk4RCXfeR7ZFWE';
