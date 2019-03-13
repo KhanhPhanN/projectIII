@@ -72,13 +72,32 @@ li:nth-child(odd) {
     position: relative;
     left: 5px;
     top: 10%;
-    width: 400px;
-    overflow-x: auto;
+    width: auto;
+    /* overflow-x: auto; */
     padding: 5px;
     z-index: 5;
     background: #fff;
     background: none
 }
-#location_s{
-    margin-bottom: 5px
+#pac-input{
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-top: 65px;
+  margin-left: 10px;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 180px;
+}
+#input_search{
+  position: relative;
+  left: 5px;
+  top: 17%;
+  width: 400px;
+  overflow-x: auto;
+  padding: 5px;
+  z-index: 5;
+  background: #fff;
+  background: none
 }

@@ -73,10 +73,6 @@ if(!check){
 }
 }
 }
-console.log(result_temp.length)
-console.log(result.map((i,index)=>{
-  return i.twitter_post;
-}))
 res.send(result);
 });  
 }  

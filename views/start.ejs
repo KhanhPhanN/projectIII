@@ -11,42 +11,29 @@
   <body>
       <div id="symbol_place">
         <img id="gps" class="symbol_place" src="https://img.icons8.com/windows/2x/map-pin.png" height="30px" width="30px" onclick="drawMap()">
-        <input id="location_s" type="text" placeholder="Nhập địa điểm">
-        <input id="sear" type="button" value="Search">
-        <img id="restaurant" class="symbol_place" src="https://img.icons8.com/windows/2x/restaurant.png" height="30px" width="30px" onclick="search_restaurant()" >
-        <img id="school" class="symbol_place" src="https://img.icons8.com/windows/2x/school-house.png" height="30px" width="30px" onclick="search_school()" >
-        <img id="hospital" class="symbol_place" src="https://img.icons8.com/windows/2x/hospital-3.png" height="30px" width="30px" onclick="search_hospital()" >
-       </div>
+        <img id="all" class="symbol_place" src="../image/icon_all.png" height="30px" width="30px">
+        <img id="fire" class="symbol_place" src="../image/icon_fire.png" height="30px" width="30px">
+        <img id="restaurant" class="symbol_place" src="https://img.icons8.com/windows/2x/restaurant.png" height="30px" width="30px">
+        <img id="school" class="symbol_place" src="https://img.icons8.com/windows/2x/school-house.png" height="30px" width="30px">
+        <img id="hospital" class="symbol_place" src="https://img.icons8.com/windows/2x/hospital-3.png" height="30px" width="30px">
+      </div>
+      <div id = "input_search">
+        <input id="pac-input"  type="text" placeholder="Nhập địa điểm hiển thị">
+      </div>
     <div id="map"></div>
-    <div id="right-panel">
-      <h2>Results</h2>
-      <ul id="places"></ul>
-      <button id="more">More results</button>
-    </div>
     <script>  
-      var myCenter;
-      var place_name="Vị trí của bạn";
-var place_search="restaurant";
+      var myCenter = {lat:35.689487,lng:139.691711};
+      var place_name="Vị trí hiện tại";
 function search_restaurant(){
-  place_search="restaurant";
-  document.getElementById('places').innerHTML="";
-  nearbySearchLocation(myCenter);
 }
 function search_school(){
-  place_search="school";
-  document.getElementById('places').innerHTML="";
-  nearbySearchLocation(myCenter);
 }
 function search_hospital(){
-  place_search="hospital";
-  document.getElementById('places').innerHTML="";
-  nearbySearchLocation(myCenter);
 }
 var x_start;
 var y_start;
 function drawMap(){
   place_name="Vị trí của bạn";
-  document.getElementById('places').innerHTML="";
   let options = {
     enableHighAccuracy: true,
     timeout: 5000,
@@ -62,8 +49,8 @@ function drawMap(){
   function onGeoSuccess(position) {
     x_start = position.coords.latitude;
     y_start = position.coords.longitude;
-    //myCenter  = {lat: x_start, lng: y_start};
-    myCenter = {lat:35.689487,lng:139.691711}
+    myCenter  = {lat: x_start, lng: y_start};
+    //myCenter = {lat:35.689487,lng:139.691711}
     initAutocomplete(myCenter);
   }
   
@@ -86,193 +73,22 @@ function drawMap(){
   
 }
    //Change Place 
-var input = document.getElementById('location_s');
-  function initAutocomplete(coordinates) {
-        infowindow = new google.maps.InfoWindow();
+  function initAutocomplete() {
+       var infowindow_location = new google.maps.InfoWindow();
         var map = new google.maps.Map(document.getElementById('map'), {
-          center: coordinates,
-          zoom: 13,
-          mapTypeId: 'roadmap'
-        });
-        var marker_location=new google.maps.Marker({
-                                    map: map,
-                                    position: coordinates,
-                                    // draggable: true,
-                                    // animation:google.maps.Animation.BOUNCE,
-                                    });
-                    marker_location.setMap(map);
-                    google.maps.event.addListener(marker_location, 'click', function() {
-          infowindow.setContent(place_name);
-          infowindow.open(map, this);
-        });
-
-
-        var autocomplete = new google.maps.places.Autocomplete(input);
-        autocomplete.bindTo('bounds', map);
-
-        // Specify just the place data fields that you need.
-        autocomplete.setFields(['place_id', 'geometry', 'name']);
-
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-        var infowindow = new google.maps.InfoWindow();
-        var infowindowContent = document.getElementById('infowindow-content');
-        infowindow.setContent(infowindowContent);
-
-        var marker = new google.maps.Marker({map: map});
-
-        marker.addListener('click', function() {
-          infowindow.open(map, marker);
-        });
-
-        autocomplete.addListener('place_changed', function() {
-          infowindow.close();
-          var place = autocomplete.getPlace();
-          if (!place.geometry) {
-           alert("Không tìm thấy vại trí");
-          }
-
-          else {
-            map.setCenter(place.geometry.location);
-            myCenter = place.geometry.location;
-            place_name=place.name;
-            initAutocomplete(myCenter);
-          }
-        });
-  
-        var sear = document.getElementById("sear");
-        sear.addEventListener('click',getTwitterData)
-
-  // Create the places service.
-  }
-  function nearbySearchLocation(coordinates){
-       
-        var map = new google.maps.Map(document.getElementById('map'), {
-          center: coordinates,
-          zoom: 13,
-          mapTypeId: 'roadmap'
-        });
-        var marker_location=new google.maps.Marker({
-                                    position: coordinates,
-                                    // draggable: true,
-                                    // animation:google.maps.Animation.BOUNCE,
-                                    });
-                    marker_location.setMap(map);
-                    infowindow = new google.maps.InfoWindow();
-                    google.maps.event.addListener(marker_location, 'click', function() {
-          infowindow.setContent(place_name);
-          infowindow.open(map, this);
-        });
-  var service = new google.maps.places.PlacesService(map);
-  var getNextPage = null;
-  var moreButton = document.getElementById('more');
-  moreButton.onclick = function() {
-    moreButton.disabled = true;
-    if (getNextPage) getNextPage();
-  };
-  var around= new google.maps.Circle({
-                center: coordinates,
-                radius:1000,
-                strokeColor:"#0000FF",
-                strokeOpacity:0.8,
-                strokeWeight:2,
-                fillColor:"#9cc1fc",
-                fillOpacity:0.4
-              });
-      around.setMap(map);
-  // Perform a nearby search.
-  service.nearbySearch(
-      {location: coordinates, radius: 1000, type: [place_search]},
-      function(results, status, pagination) {
-        if (status !== 'OK') return;
-        createMarkers(results);
-        moreButton.disabled = !pagination.hasNextPage;
-        getNextPage = pagination.hasNextPage && function() {
-          pagination.nextPage();
-        };
-      });
-
-      var autocomplete = new google.maps.places.Autocomplete(input);
-        autocomplete.bindTo('bounds', map);
-
-        // Specify just the place data fields that you need.
-        autocomplete.setFields(['place_id', 'geometry', 'name']);
-
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-        var infowindow = new google.maps.InfoWindow();
-        var infowindowContent = document.getElementById('infowindow-content');
-        infowindow.setContent(infowindowContent);
-
-        var marker = new google.maps.Marker({map: map});
-
-        marker.addListener('click', function() {
-          infowindow.open(map, marker);
-        });
-
-        autocomplete.addListener('place_changed', function() {
-          infowindow.close();
-
-          var place = autocomplete.getPlace();
-
-          if (!place.geometry) {
-            alert("Không tìm thấy vị trí")
-          }
-          else {
-            map.setCenter(place.geometry.location);
-            myCenter = place.geometry.location;
-            place_name=place.name;
-            initAutocomplete(myCenter);
-          }
-        });
-  function createMarkers(places) {
-  var bounds = new google.maps.LatLngBounds();
-  var placesList = document.getElementById('places');
-  for (var i = 0, place; place = places[i]; i++) {
-    //console.log(places[i])
-    var image = {
-      url: place.icon,
-      size: new google.maps.Size(71, 71),
-      origin: new google.maps.Point(0, 0),
-      anchor: new google.maps.Point(17, 34),
-      scaledSize: new google.maps.Size(25, 25)
-    };
-
-    var marker = new google.maps.Marker({
-      map: map,
-      icon: image,
-      title: place.name,
-      position: place.geometry.location
-    });
-    var li = document.createElement('li');
-    li.textContent = place.name;
-    placesList.appendChild(li);
-    bounds.extend(place.geometry.location);
-  }
-  map.fitBounds(bounds);
-}
-}
-
-
-  function createPlaceTwitter(places){
-    var map = new google.maps.Map(document.getElementById('map'), {
           center: myCenter,
-          zoom: 13,
+          zoom: 11.5,
           mapTypeId: 'roadmap'
         });
-
         var marker_location=new google.maps.Marker({
                                     map: map,
                                     position: myCenter,
                                     icon: "../image/marker_location.png"
-                                    // draggable: true,
-                                    // animation:google.maps.Animation.BOUNCE,
                                     });
                     marker_location.setMap(map);
-                    var infowindow = new google.maps.InfoWindow();
                     google.maps.event.addListener(marker_location, 'click', function() {
-          infowindow.setContent(place_name);
-          infowindow.open(map, this);
+          infowindow_location.setContent(place_name);
+          infowindow_location.open(map, this);
         });
 
         var around= new google.maps.Circle({
@@ -284,9 +100,35 @@ var input = document.getElementById('location_s');
                 fillColor:"#C2D8EB",
                 fillOpacity:0.4
               });
-      around.setMap(map);
+       around.setMap(map);
 
+       var all = document.getElementById("all");
+       all.addEventListener("click", getTwitterData)
 
+        var input = document.getElementById('pac-input');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        // Specify just the place data fields that you need.
+        autocomplete.setFields(['place_id', 'geometry', 'name']);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        autocomplete.addListener('place_changed', function() {
+          var place = autocomplete.getPlace();
+          if (!place.geometry) {
+           alert("Không tìm thấy vị trí");
+          }
+          else {
+            map.setCenter(place.geometry.location);
+            console.log(place.geometry.location)
+            myCenter = {lat: place.geometry.location.lat(), lng: place.geometry.location.lng()};
+            place_name=place.name;
+            marker_location.setPosition(myCenter);
+            around.setCenter(myCenter);
+            getTwitterData();
+          }
+        });
+
+// Twitter data on Google map
+function createPlaceTwitter(places){
   var bounds = new google.maps.LatLngBounds();
   for (var i = 0, place; place = places[i]; i++) {
     var image = {
@@ -306,10 +148,11 @@ var input = document.getElementById('location_s');
     var infowindow2 = new google.maps.InfoWindow();
     var marker = new google.maps.Marker({
       map: map,
-      icon: image,
+      icon: "../image/icon_twitter.png",
       title: place.twitter_post.length.toString(),
       position: place.location,
       //user: detail_user,
+      label: place.twitter_post.length.toString(),
       text: info
     });
     //marker.setMap(map);
@@ -320,23 +163,25 @@ var input = document.getElementById('location_s');
     bounds.extend(place.location);
   }
   map.fitBounds(bounds);
-
 }
-
-
-  function getTwitterData(){
+// Get Twitter Data
+function getTwitterData(){
+  console.log(myCenter)
   axios.post('/getData',{radius: 10, location: myCenter})
         .then((res)=>{
            array = res.data;
-           console.log(array)
+           if(array.length<1){
+             alert("Không có dữ liệu trong vùng được chọn")
+           }else{
            createPlaceTwitter(array)
+           }
         })
         .catch((err)=>console.log(err))
       }
-
+  }
 
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_MbzpCBBPrMmvO4aLrc52vBXrsviNV6U&libraries=places&callback=drawMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_MbzpCBBPrMmvO4aLrc52vBXrsviNV6U&libraries=places&callback=initAutocomplete"
          async defer></script>
   </body>
 </html>

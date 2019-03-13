@@ -12,6 +12,115 @@
     <button onclick="a()">save</button>
 </body>
 <script>
+    //   function nearbySearchLocation(coordinates){
+       
+//         var map = new google.maps.Map(document.getElementById('map'), {
+//           center: coordinates,
+//           zoom: 13,
+//           mapTypeId: 'roadmap'
+//         });
+//         var marker_location=new google.maps.Marker({
+//                                     position: coordinates,
+//                                     // draggable: true,
+//                                     // animation:google.maps.Animation.BOUNCE,
+//                                     });
+//                     marker_location.setMap(map);
+//                     infowindow = new google.maps.InfoWindow();
+//                     google.maps.event.addListener(marker_location, 'click', function() {
+//           infowindow.setContent(place_name);
+//           infowindow.open(map, this);
+//         });
+//   var service = new google.maps.places.PlacesService(map);
+//   var getNextPage = null;
+//   var moreButton = document.getElementById('more');
+//   moreButton.onclick = function() {
+//     moreButton.disabled = true;
+//     if (getNextPage) getNextPage();
+//   };
+//   var around= new google.maps.Circle({
+//                 center: coordinates,
+//                 radius:1000,
+//                 strokeColor:"#0000FF",
+//                 strokeOpacity:0.8,
+//                 strokeWeight:2,
+//                 fillColor:"#9cc1fc",
+//                 fillOpacity:0.4
+//               });
+//       around.setMap(map);
+//   // Perform a nearby search.
+//   service.nearbySearch(
+//       {location: coordinates, radius: 1000, type: [place_search]},
+//       function(results, status, pagination) {
+//         if (status !== 'OK') return;
+//         createMarkers(results);
+//         moreButton.disabled = !pagination.hasNextPage;
+//         getNextPage = pagination.hasNextPage && function() {
+//           pagination.nextPage();
+//         };
+//       });
+
+//       var autocomplete = new google.maps.places.Autocomplete(input);
+//         autocomplete.bindTo('bounds', map);
+
+//         // Specify just the place data fields that you need.
+//         autocomplete.setFields(['place_id', 'geometry', 'name']);
+
+//         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+//         var infowindow = new google.maps.InfoWindow();
+//         var infowindowContent = document.getElementById('infowindow-content');
+//         infowindow.setContent(infowindowContent);
+
+//         var marker = new google.maps.Marker({map: map});
+
+//         marker.addListener('click', function() {
+//           infowindow.open(map, marker);
+//         });
+
+//         autocomplete.addListener('place_changed', function() {
+//           infowindow.close();
+
+//           var place = autocomplete.getPlace();
+
+//           if (!place.geometry) {
+//             alert("Không tìm thấy vị trí")
+//           }
+//           else {
+//             map.setCenter(place.geometry.location);
+//             myCenter = place.geometry.location;
+//             place_name=place.name;
+//             initAutocomplete(myCenter);
+//           }
+//         });
+//   function createMarkers(places) {
+//   var bounds = new google.maps.LatLngBounds();
+//   var placesList = document.getElementById('places');
+//   for (var i = 0, place; place = places[i]; i++) {
+//     //console.log(places[i])
+//     var image = {
+//       url: place.icon,
+//       size: new google.maps.Size(71, 71),
+//       origin: new google.maps.Point(0, 0),
+//       anchor: new google.maps.Point(17, 34),
+//       scaledSize: new google.maps.Size(25, 25)
+//     };
+
+//     var marker = new google.maps.Marker({
+//       map: map,
+//       icon: image,
+//       title: place.name,
+//       position: place.geometry.location
+//     });
+//     var li = document.createElement('li');
+//     li.textContent = place.name;
+//     placesList.appendChild(li);
+//     bounds.extend(place.geometry.location);
+//   }
+//   map.fitBounds(bounds);
+// }
+// }
+
+
     function a(){
        axios.post('/getData',{data:"Japan"})
         .then((res)=>{
