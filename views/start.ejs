@@ -103,8 +103,15 @@ function drawMap(){
        around.setMap(map);
 
        var all = document.getElementById("all");
-       all.addEventListener("click", getTwitterData)
-
+       all.addEventListener("click", getTwitterData);
+       var fire = document.getElementById("fire");
+       fire.addEventListener("click", getTwitterDataFire);
+       var restaurant = document.getElementById("restaurant");
+       restaurant.addEventListener("click", getTwitterDataStore);
+       var school = document.getElementById("school");
+       school.addEventListener("click", getTwitterDataSchool);
+       var hospital = document.getElementById("hospital");
+       hospital.addEventListener("click", getTwitterDataHospital);
         var input = document.getElementById('pac-input');
         var autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', map);
@@ -123,21 +130,16 @@ function drawMap(){
             place_name=place.name;
             marker_location.setPosition(myCenter);
             around.setCenter(myCenter);
+            clearMarker();
             getTwitterData();
           }
         });
 
+var array_marker = [];
 // Twitter data on Google map
 function createPlaceTwitter(places){
   var bounds = new google.maps.LatLngBounds();
   for (var i = 0, place; place = places[i]; i++) {
-    var image = {
-      url: "../image/icon_twitter.png",
-      size: new google.maps.Size(71, 71),
-      origin: new google.maps.Point(0, 0),
-      anchor: new google.maps.Point(17, 34),
-      scaledSize: new google.maps.Size(25, 25)
-    };
     var info="";
     for(var j = 0;j<place.twitter_post.length;j++){
     var detail_user = "<div><img src = "+ place.twitter_post[j].user.profile_image_url +"> <a target=\"_blank\" href = \"https://twitter.com/"+ place.twitter_post[j].user.display_name +"\"><p>"+ place.twitter_post[j].user.name +"</p></a><br/>"
@@ -155,6 +157,7 @@ function createPlaceTwitter(places){
       label: place.twitter_post.length.toString(),
       text: info
     });
+  array_marker.push(marker);
     //marker.setMap(map);
           google.maps.event.addListener(marker, 'click', function() {
           infowindow2.setContent(this.text);
@@ -164,7 +167,15 @@ function createPlaceTwitter(places){
   }
   map.fitBounds(bounds);
 }
-// Get Twitter Data
+
+function clearMarker(){
+for(var i = 0 ; i<array_marker.length;i++){
+array_marker[i].setMap(null);
+}
+array_marker = [];
+} 
+
+// Get All Twitter Data
 function getTwitterData(){
   console.log(myCenter)
   axios.post('/getData',{radius: 10, location: myCenter})
@@ -173,12 +184,74 @@ function getTwitterData(){
            if(array.length<1){
              alert("Không có dữ liệu trong vùng được chọn")
            }else{
-           createPlaceTwitter(array)
+             clearMarker();
+             createPlaceTwitter(array)
            }
         })
         .catch((err)=>console.log(err))
       }
-  }
+  
+// Get Fire Twitter Data
+function getTwitterDataFire(){
+  axios.post('/getDataFire',{radius: 10, location: myCenter, keyword:["火難","火事","火災", "発煙","煙の火","たばこを吸う","消防"]})
+        .then((res)=>{
+           arrayFire = res.data;
+           if(arrayFire.length<1){
+             alert("Không có dữ liệu trong vùng được chọn")
+           }else{
+             clearMarker();
+             createPlaceTwitter(arrayFire)
+           }
+        })
+        .catch((err)=>console.log(err))
+     }
+  
+    // Get restaurant Twitter Data
+function getTwitterDataStore(){
+  axios.post('/getDataStore',{radius: 10, location: myCenter, keyword:["レストラン", "食べ物屋", "料理店", "食堂", "飲食店", "料理屋","グリル","割烹店","料亭","食べ物","食物 "]})
+        .then((res)=>{
+           arrayStore = res.data;
+           if(arrayStore.length<1){
+             alert("Không có dữ liệu trong vùng được chọn")
+           }else{
+             clearMarker();
+             createPlaceTwitter(arrayStore)
+           }
+        })
+        .catch((err)=>console.log(err))
+     }
+    // Get school Twitter Data
+    function getTwitterDataSchool(){
+  axios.post('/getDataSchool',{radius: 10, location: myCenter, keyword:["学校","授業","学園","学院","スクール","学生たち","階級","先生"]})
+        .then((res)=>{
+           arraySchool = res.data;
+           if(arraySchool.length<1){
+             alert("Không có dữ liệu trong vùng được chọn")
+           }else{
+             clearMarker();
+             createPlaceTwitter(arraySchool)
+           }
+        })
+        .catch((err)=>console.log(err))
+     }
+    
+      // Get hospital Twitter Data
+    function getTwitterDataHospital(){
+  axios.post('/getDataHospital',{radius: 10, location: myCenter, keyword:["病院","ホスピタル","医療ステーション","獣医病院","患者さん","医者","看護師","薬局"]})
+        .then((res)=>{
+           arrayHospital = res.data;
+           if(arrayHospital.length<1){
+             alert("Không có dữ liệu trong vùng được chọn")
+           }else{
+             clearMarker();
+             createPlaceTwitter(arrayHospital)
+           }
+        })
+        .catch((err)=>console.log(err))
+     }
+    
+}
+
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_MbzpCBBPrMmvO4aLrc52vBXrsviNV6U&libraries=places&callback=initAutocomplete"

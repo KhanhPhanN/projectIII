@@ -82,6 +82,292 @@ console.log('Fetch Error :-S', err);
 })
 })
 
+
+app.post("/getDataFire",function(req,res){
+  var location = req.body.location;
+  var radius = req.body.radius;
+  var keyword = req.body.keyword;
+ // console.log(place_name)
+    const url_twitter = "http://localhost:9200/locationjapan_ls/_search?size=1000&pretty";
+    fetch(url_twitter,{
+        method: 'GET',
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Accept": "application/json",
+      },
+      mode: "cors",
+    })  
+.then(  
+function(response) {  
+if (response.status !== 200) {  
+console.log('Looks like there was a problem. Status Code: ' +  
+response.status);  
+return;  
+}
+
+// Examine the text in the response  
+response.json().then(function(data) {  
+var array = [];
+var result_temp = [];
+array=toOutput(data.hits.hits)
+//console.log(array)
+for(var i=0;i<array.length;i++){
+if(calculateDistance(radius,location,array[i].place.location)){
+  var check_fire = false;
+  var count_check = 0;
+  for(var m = 0;m<keyword.length;m++){
+    if(array[i].text.indexOf(keyword[m])>-1)
+    {
+      check_fire = true;
+      count_check++;
+    }
+  }
+  if(check_fire)
+  result_temp.push(array[i]);
+}
+}
+var result = [];
+var c = 0;
+
+for(var i = 0; i<result_temp.length ; i++){
+  if(result.length==0){
+    result.push({location: { lat: result_temp[i].place.location.lat, lng: result_temp[i].place.location.lng}, twitter_post: [result_temp[i]]})
+  }else{
+    var check = false;
+for(var j = 0; j<result.length; j++){
+  if(result[j].location.lat == result_temp[i].place.location.lat && result[j].location.lng == result_temp[i].place.location.lng){
+    check = true
+    result[j].twitter_post.push(result_temp[i]);
+  }
+}
+if(!check){
+  result.push({location: { lat: result_temp[i].place.location.lat, lng: result_temp[i].place.location.lng}, twitter_post: [result_temp[i]]})
+}
+}
+}
+res.send(result);
+});  
+}  
+)  
+.catch(function(err) {  
+console.log('Fetch Error :-S', err);  
+})
+})
+
+app.post("/getDataStore",function(req,res){
+  var location = req.body.location;
+  var radius = req.body.radius;
+  var keyword = req.body.keyword;
+ // console.log(place_name)
+    const url_twitter = "http://localhost:9200/locationjapan_ls/_search?size=5000&pretty";
+    fetch(url_twitter,{
+        method: 'GET',
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Accept": "application/json",
+      },
+      mode: "cors",
+    })  
+.then(  
+function(response) {  
+if (response.status !== 200) {  
+console.log('Looks like there was a problem. Status Code: ' +  
+response.status);  
+return;  
+}
+
+// Examine the text in the response  
+response.json().then(function(data) {  
+var array = [];
+var result_temp = [];
+array=toOutput(data.hits.hits)
+//console.log(array)
+for(var i=0;i<array.length;i++){
+if(calculateDistance(radius,location,array[i].place.location)){
+  var check_fire = false;
+  var count_check = 0;
+  for(var m = 0;m<keyword.length;m++){
+    if(array[i].text.indexOf(keyword[m])>-1)
+    {
+      check_fire = true;
+      count_check++;
+    }
+  }
+  if(check_fire)
+  result_temp.push(array[i]);
+}
+}
+var result = [];
+var c = 0;
+
+for(var i = 0; i<result_temp.length ; i++){
+  if(result.length==0){
+    result.push({location: { lat: result_temp[i].place.location.lat, lng: result_temp[i].place.location.lng}, twitter_post: [result_temp[i]]})
+  }else{
+    var check = false;
+for(var j = 0; j<result.length; j++){
+  if(result[j].location.lat == result_temp[i].place.location.lat && result[j].location.lng == result_temp[i].place.location.lng){
+    check = true
+    result[j].twitter_post.push(result_temp[i]);
+  }
+}
+if(!check){
+  result.push({location: { lat: result_temp[i].place.location.lat, lng: result_temp[i].place.location.lng}, twitter_post: [result_temp[i]]})
+}
+}
+}
+res.send(result);
+});  
+}  
+)  
+.catch(function(err) {  
+console.log('Fetch Error :-S', err);  
+})
+})
+
+
+app.post("/getDataSchool",function(req,res){
+  var location = req.body.location;
+  var radius = req.body.radius;
+  var keyword = req.body.keyword;
+ // console.log(place_name)
+    const url_twitter = "http://localhost:9200/locationjapan_ls/_search?size=5000&pretty";
+    fetch(url_twitter,{
+        method: 'GET',
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Accept": "application/json",
+      },
+      mode: "cors",
+    })  
+.then(  
+function(response) {  
+if (response.status !== 200) {  
+console.log('Looks like there was a problem. Status Code: ' +  
+response.status);  
+return;  
+}
+
+// Examine the text in the response  
+response.json().then(function(data) {  
+var array = [];
+var result_temp = [];
+array=toOutput(data.hits.hits)
+//console.log(array)
+for(var i=0;i<array.length;i++){
+if(calculateDistance(radius,location,array[i].place.location)){
+  var check_fire = false;
+  var count_check = 0;
+  for(var m = 0;m<keyword.length;m++){
+    if(array[i].text.indexOf(keyword[m])>-1)
+    {
+      check_fire = true;
+      count_check++;
+    }
+  }
+  if(check_fire)
+  result_temp.push(array[i]);
+}
+}
+var result = [];
+var c = 0;
+
+for(var i = 0; i<result_temp.length ; i++){
+  if(result.length==0){
+    result.push({location: { lat: result_temp[i].place.location.lat, lng: result_temp[i].place.location.lng}, twitter_post: [result_temp[i]]})
+  }else{
+    var check = false;
+for(var j = 0; j<result.length; j++){
+  if(result[j].location.lat == result_temp[i].place.location.lat && result[j].location.lng == result_temp[i].place.location.lng){
+    check = true
+    result[j].twitter_post.push(result_temp[i]);
+  }
+}
+if(!check){
+  result.push({location: { lat: result_temp[i].place.location.lat, lng: result_temp[i].place.location.lng}, twitter_post: [result_temp[i]]})
+}
+}
+}
+res.send(result);
+});  
+}  
+)  
+.catch(function(err) {  
+console.log('Fetch Error :-S', err);  
+})
+})
+
+app.post("/getDataHospital",function(req,res){
+  var location = req.body.location;
+  var radius = req.body.radius;
+  var keyword = req.body.keyword;
+ // console.log(place_name)
+    const url_twitter = "http://localhost:9200/locationjapan_ls/_search?size=5000&pretty";
+    fetch(url_twitter,{
+        method: 'GET',
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Accept": "application/json",
+      },
+      mode: "cors",
+    })  
+.then(  
+function(response) {  
+if (response.status !== 200) {  
+console.log('Looks like there was a problem. Status Code: ' +  
+response.status);  
+return;  
+}
+
+// Examine the text in the response  
+response.json().then(function(data) {  
+var array = [];
+var result_temp = [];
+array=toOutput(data.hits.hits)
+//console.log(array)
+for(var i=0;i<array.length;i++){
+if(calculateDistance(radius,location,array[i].place.location)){
+  var check_fire = false;
+  var count_check = 0;
+  for(var m = 0;m<keyword.length;m++){
+    if(array[i].text.indexOf(keyword[m])>-1)
+    {
+      check_fire = true;
+      count_check++;
+    }
+  }
+  if(check_fire)
+  result_temp.push(array[i]);
+}
+}
+var result = [];
+var c = 0;
+
+for(var i = 0; i<result_temp.length ; i++){
+  if(result.length==0){
+    result.push({location: { lat: result_temp[i].place.location.lat, lng: result_temp[i].place.location.lng}, twitter_post: [result_temp[i]]})
+  }else{
+    var check = false;
+for(var j = 0; j<result.length; j++){
+  if(result[j].location.lat == result_temp[i].place.location.lat && result[j].location.lng == result_temp[i].place.location.lng){
+    check = true
+    result[j].twitter_post.push(result_temp[i]);
+  }
+}
+if(!check){
+  result.push({location: { lat: result_temp[i].place.location.lat, lng: result_temp[i].place.location.lng}, twitter_post: [result_temp[i]]})
+}
+}
+}
+res.send(result);
+});  
+}  
+)  
+.catch(function(err) {  
+console.log('Fetch Error :-S', err);  
+})
+})
+
 // Distance 2 location
 function calculateDistance(radius, location1, location2)
     {
