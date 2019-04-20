@@ -1,3 +1,5 @@
+
+
 File SERVER: server.js
 - Tạo server chạy trên local với cổng là 8084
 - Xử lý các yêu cầu người dùng
@@ -29,4 +31,31 @@ Thư mục public: Lưu trữ các file về định về css, js hay các file 
 Thư mục node_modules: Lưu trữ các module cần thiết có thể được sử dụng trong chương trình
 
 
+
+Cơ sở dữ liệu được lưu tại local với cách lấy dữ liệu từ logstash 
+File cấu hình của logstash: Dữ liệu hiện tại chỉ được lấy tại nhật bản , các khu vực khác trên thế giới chưa được thực hiện cấu hình để có thể lấy được dữ liệu
+
+input {
+    twitter {
+        consumer_key => "yat6Gf2oCq266HWnLGuIVEX9Y"
+        consumer_secret => "4K0SGeeW8qZ1sO6ivaujWXfeqK6me0qeWlmNSPNwV7Dd2RHX6E"
+        oauth_token => "1096331330684502016-LRp9LjblZsthI7ltcINUSkP5TcEMZM"
+        oauth_token_secret => "JY2HlXgL9BLMsRvO6NCYYB295gx1IBwpI0sDUt6o63id0"
+        ignore_retweets => true
+        full_tweet => true
+        use_samples => false
+        languages =>["ja"]
+        locations =>"123,20,154,46"
+        # locations => "103,8,110,24"
+    }
+}
+output {
+    elasticsearch {
+        hosts => ["localhost:9200"]
+        index => "locationvn_ls"
+    }
+    stdout {codec => rubydebug}
+}
+
+Dữ liệu lấy được sẽ được truy cập thông qua địa chỉ local: localhost:9200/....
  
