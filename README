@@ -1,3 +1,32 @@
 File SERVER: server.js
 - Tạo server chạy trên local với cổng là 8084
 - Xử lý các yêu cầu người dùng
++ Lấy dữ liệu từ elasticsearch
++ Lọc dữ liệu lấy ra các thuộc tính cần sử dụng
++ Nhận yêu cầu tìm kiếm các địa điểm theo category
++ Trả về dữ liệu người dùng yêu cầu (nếu không có dữ liệu trong vùng được chọn sẽ gửi một thông báo cho người dùng
+
+
+
+
+Thư mục views: Lưu trữ các trang giao diện người dùng
+- Trang start.js: Giao diện chính của ứng dụng
++ Hiển thị bản đồ
++ Dữ liệu lấy được từ Twitter được hiển thị tại trang này
++ Có một số thành phần khác dành cho category
+
+
+
+
+Thư mục public: Lưu trữ các file về định về css, js hay các file hình ảnh của ứng dụng
+- File public/css/main.css     : Định dạng css cho trang start.ejs
+- File mục public/js/main.js   : Thêm các mã javascript để gửi, nhận và đổ dữ liệu lên bản đồ
+- Thư mục public/image         : Chứa các hình ảnh (cụ thể chứa hình ảnh biểu tượng cho từng category)
+
+
+
+
+Thư mục node_modules: Lưu trữ các module cần thiết có thể được sử dụng trong chương trình
+
+
+ 
